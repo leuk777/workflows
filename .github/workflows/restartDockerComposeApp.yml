@@ -12,9 +12,9 @@ on:
       compose_file:
         type: string
         required: true
-      access_server_key:
+    secrets:
+      SERVER_ACCESS_KEY:
         required: true
-        type: string
 
 jobs:
   restart-app:
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: "Connect to server"
         env:
-          SERVER_ACCESS_KEY: ${{ inputs.access_server_key }}
+          SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
         run: |
           echo $SERVER_ACCESS_KEY > access.pem && chmod 600 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
