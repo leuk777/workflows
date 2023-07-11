@@ -1,0 +1,53 @@
+name: Build Image And Push to AWS ECR
+
+on:
+  workflow_call:
+    inputs: 
+      region: 
+        required: true
+      repo:
+        required: true
+      
+    secrets:
+      access_key_id:
+        required: true 
+      secret_access_key:
+        required: true 
+
+jobs:
+  connect-push-to-ecr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build Image
+        run: docker build -t artefact .
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.access_key_id }}
+          aws-secret-access-key: ${{ secrets.secret_access_key }}
+          aws-region: ${{ inputs.region }}
+          
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: Push to AWS ECR
+        env: 
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPO: ${{ inputs.repo }}
+          TAG: ${{ github.sha }}
+        run: |
+          docker tag artefact:latest $REGISTRY/$REPO:$TAG
+          docker tag $REGISTRY/$REPO:$TAG $REGISTRY/$REPO:latest
+          echo "Pushing image to ECR..."
+          docker push $REGISTRY/$REPO:$TAG
+          docker push $REGISTRY/$REPO:latest
+          
+      - name: Delete old images
+        uses: LeiaInc/devops-delete-old-aws-ecr-images@v1
+        with:
+            repo-name: ${{ env.IMAGE_NAME }}
+            qtd-images: 3
+      

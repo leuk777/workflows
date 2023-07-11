@@ -1,0 +1,39 @@
+name: Restart docker compose 
+
+on: 
+  workflow_call:
+    inputs:
+      host:
+        required: true
+        type: string
+      user:
+        default: 'ubuntu'
+        type: string
+      compose_file:
+        required: true
+    secrets:
+      private_key:
+        required: true
+        type: string
+
+jobs: 
+  login-restart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Login to ${{ inputs.host }} and restart app"
+        run: |
+          echo $PRIVATE_KEY > access.pem && chmod 600 access.pem
+          echo "Connection..."
+          ssh -i access.pem ${USER}@${HOST} '
+              ([[ ! -d "/home/ubuntu/app"]] && git clone git@github.com:leuk777/${{ github.repository }}.git app) &&
+              cd /home/ubuntu/app &&
+              git checkout develop &&
+              git fetch --all &&
+              git reset --hard && 
+              git pull origin develop &&
+              docker compose down && 
+              docker compose -f docker-compose.${{ env.ENV }}.yml up -d &&
+              exit
+          '
+
