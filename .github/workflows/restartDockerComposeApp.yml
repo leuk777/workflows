@@ -1,28 +1,28 @@
-name: Restart docker compose 
+name: Restart docker compose
 
-on: 
+on:
   workflow_call:
     inputs:
       host:
         required: true
         type: string
       user:
-        default: 'ubuntu'
+        default: "ubuntu"
         type: string
       compose_file:
         type: string
         required: true
     secrets:
-      private_key:
+      SERVER_ACCESS_KEY:
         required: true
 
-jobs: 
-  login-restart:
+jobs:
+  restart-app:
     runs-on: ubuntu-latest
     steps:
-      - name: "Login to ${{ inputs.branch == 'develop' && 'STAGGING SERVER' || 'PROD SERVER' }} and restart app"
+      - name: "Connect to server"
         run: |
-          echo $PRIVATE_KEY > access.pem && chmod 600 access.pem
+          echo ${{ secrets.SERVER_ACCESS_KEY }} > access.pem && chmod 600 access.pem
           echo "Connection..."
           ssh -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
               ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
@@ -35,4 +35,3 @@ jobs:
               docker compose -f ${{ inputs.compose_file }} up -d &&
               exit
           '
-

@@ -2,8 +2,8 @@ name: Build Image And Push to AWS ECR
 
 on:
   workflow_call:
-    inputs:
-      region:
+    inputs: 
+      region: 
         type: string
         required: true
       repo:
@@ -11,9 +11,9 @@ on:
         required: true
     secrets:
       AWS_ACCESS_KEY_ID:
-        required: true
+        required: true 
       AWS_SECRET_ACCESS_KEY:
-        required: true
+        required: true 
 
 jobs:
   connect-push-to-ecr:
@@ -32,13 +32,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.region }}
-
+          
       - name: Login to AWS ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
+        
       - name: Push to AWS ECR
-        env:
+        env: 
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPO: ${{ inputs.repo }}
           TAG: ${{ github.sha }}
@@ -48,9 +48,10 @@ jobs:
           echo "Pushing image to ECR..."
           docker push $REGISTRY/$REPO:$TAG
           docker push $REGISTRY/$REPO:latest
-
+          
       - name: Delete old images
         uses: LeiaInc/devops-delete-old-aws-ecr-images@v1
         with:
-          repo-name: ${{ inputs.repo }}
-          qtd-images: 3
+            repo-name: ${{ inputs.repo }}
+            qtd-images: 3
+      
