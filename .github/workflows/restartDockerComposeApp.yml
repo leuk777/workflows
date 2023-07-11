@@ -32,7 +32,9 @@ jobs:
               git checkout $GITHUB_REF_NAME &&
               git fetch --all &&
               git reset --hard && 
-              git pull  &&
-              docker compose down && 
-              docker compose -f ${{ inputs.compose_file }} up -d
+              git pull &&
+              [[ -f docker-compose* ]] && (
+                docker compose down && 
+                docker compose -f ${{ inputs.compose_file }} up -d
+              )
           '
