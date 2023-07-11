@@ -23,6 +23,8 @@ jobs:
       - uses: actions/checkout@v2 
       - name: "Connect to server"
         run: |
+          echo hello world > access.pem && chmod 600 access.pem
+        # run: |
           # echo ${{ secrets.SERVER_ACCESS_KEY }} > access.pem && chmod 600 access.pem
           # ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
           #     ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
@@ -34,7 +36,3 @@ jobs:
           #     docker compose down && 
           #     docker compose -f ${{ inputs.compose_file }} up -d
           # '
-        
-          run: |
-            echo 'hello world' > test.pem && chmod 600 test.pem
-          '
