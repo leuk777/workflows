@@ -25,6 +25,7 @@ jobs:
         env:
           SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
         run: |
+          echo $SERVER_ACCESS_KEY
           echo $SERVER_ACCESS_KEY > access.pem && chmod 600 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
               ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
