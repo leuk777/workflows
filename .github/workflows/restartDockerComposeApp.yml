@@ -20,6 +20,7 @@ jobs:
   restart-app:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2 
       - name: "Connect to server"
         run: |
           echo ${{ secrets.SERVER_ACCESS_KEY }} > access.pem && chmod 600 access.pem
