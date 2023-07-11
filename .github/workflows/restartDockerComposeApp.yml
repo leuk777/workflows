@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       user:
-        default: "ubuntu"
+        default: "root"
         type: string
       compose_file:
         type: string
