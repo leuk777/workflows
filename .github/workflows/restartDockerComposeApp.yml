@@ -14,7 +14,7 @@ on:
         required: true
       branch: 
         type: string
-        default: develop
+        default: stagging
     secrets:
       private_key:
         required: true
@@ -28,7 +28,7 @@ jobs:
           echo $PRIVATE_KEY > access.pem && chmod 600 access.pem
           echo "Connection..."
           ssh -i access.pem ${USER}@${HOST} '
-              ([[ ! -d "/home/ubuntu/app"]] && git clone git@github.com:leuk777/${{ github.repository }}.git app) &&
+              ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
               cd /home/ubuntu/app &&
               git checkout ${{ inputs.branch }} &&
               git fetch --all &&
