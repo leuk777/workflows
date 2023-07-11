@@ -12,9 +12,9 @@ on:
       compose_file:
         type: string
         required: true
-    secrets:
-      SERVER_ACCESS_KEY:
+      access_server_key:
         required: true
+        type: string
 
 jobs:
   restart-app:
@@ -23,9 +23,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: "Connect to server"
         env:
-          SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
+          SERVER_ACCESS_KEY: ${{ inputs.access_server_key }}
         run: |
-          echo $SERVER_ACCESS_KEY
           echo $SERVER_ACCESS_KEY > access.pem && chmod 600 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
               ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
