@@ -28,7 +28,7 @@ jobs:
           echo "$SERVER_ACCESS_KEY" > access.pem && chmod 400 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
               git config --global --add safe.directory /home/ubuntu/app &&
-              ([[ ! -d /home/ubuntu/app ]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/${{ github.repository }}.git /home/ubuntu/app);
+              ([[ ! -d /home/ubuntu/app ]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/sanitas.deploy.git /home/ubuntu/app);
               cd /home/ubuntu/app &&
               git checkout $GITHUB_REF_NAME &&
               git fetch --all &&
