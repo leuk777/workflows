@@ -10,13 +10,14 @@ on:
         default: 'ubuntu'
         type: string
       compose_file:
+        type: string
         required: true
       branch: 
+        type: string
         default: develop
     secrets:
       private_key:
         required: true
-        type: string
 
 jobs: 
   login-restart:
