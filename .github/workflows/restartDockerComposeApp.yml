@@ -22,15 +22,19 @@ jobs:
     steps:
       - name: "Connect to server"
         run: |
-          echo ${{ secrets.SERVER_ACCESS_KEY }} > access.pem && chmod 600 access.pem &&
+          echo ${{ secrets.SERVER_ACCESS_KEY }} > access.pem && chmod 600 access.pem
           ssh -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
-              ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
-              cd /home/ubuntu/app &&
-              git checkout $GITHUB_REF_NAME &&
-              git fetch --all &&
-              git reset --hard && 
-              git pull  &&
-              docker compose down && 
-              docker compose -f ${{ inputs.compose_file }} up -d &&
-              exit
+              touch test.txt
           '
+        # run: |
+        #   echo ${{ secrets.SERVER_ACCESS_KEY }} > access.pem && chmod 600 access.pem
+        #   ssh -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
+        #       ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
+        #       cd /home/ubuntu/app &&
+        #       git checkout $GITHUB_REF_NAME &&
+        #       git fetch --all &&
+        #       git reset --hard && 
+        #       git pull  &&
+        #       docker compose down && 
+        #       docker compose -f ${{ inputs.compose_file }} up -d
+        #   '
