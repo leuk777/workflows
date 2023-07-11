@@ -23,18 +23,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: "Connect to server"
         env:
-          # SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
-          SERVER_ACCESS_KEY: "-----BEGIN OPENSSH PRIVATE KEY-----
-            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtz
-            c2gtZWQyNTUxOQAAACB8v3lYXtPz5WmeFHK1bnUQXxRGZjccSBvGLne48mNhbAAA
-            AIgyXvuUMl77lAAAAAtzc2gtZWQyNTUxOQAAACB8v3lYXtPz5WmeFHK1bnUQXxRG
-            ZjccSBvGLne48mNhbAAAAEAwUQIBATAFBgMrZXAEIgQggw7ktH+v3w8CqIxpN8ZO
-            e3y/eVhe0/PlaZ4UcrVudRBfFEZmNxxIG8Yud7jyY2FsAAAAAAECAwQF
-            -----END OPENSSH PRIVATE KEY-----
-            "
-          
+          SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
         run: |
-          echo $SERVER_ACCESS_KEY > access.pem && chmod 600 access.pem
+          echo $SERVER_ACCESS_KEY > access.pem && chmod 400 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
               ([[ ! -d "/home/ubuntu/app"]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ github.repository }}.git app) &&
               cd /home/ubuntu/app &&
