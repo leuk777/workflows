@@ -47,7 +47,7 @@ jobs:
               git reset --hard && 
               git pull &&
               ls docker-compose* 1> /dev/null 2>&1 && 
-              docker stop $(docker ps -aq) &&
+              [[ ! -n $(docker ps -aq) ]] && docker stop $(docker ps -aq) && docker rm $(docker ps -aq);
               docker compose down && 
-              docker compose -f ${{ inputs.compose_file }} up -d
+              docker compose -f ${{ inputs.compose_file }} up -d --build
           '
