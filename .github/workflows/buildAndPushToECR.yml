@@ -31,8 +31,6 @@ jobs:
             echo ${{ secrets.ENV_STAGGING }} > .env
           fi 
 
-          cat .env
-
           docker build -t artefact .
 
       - name: Configure AWS
