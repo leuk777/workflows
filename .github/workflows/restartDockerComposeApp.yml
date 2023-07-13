@@ -34,7 +34,7 @@ jobs:
               git config --global --add safe.directory /home/ubuntu/app &&
               ([[ ! -d /home/ubuntu/app ]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/sanitas.deploy.git /home/ubuntu/app);
               cd /home/ubuntu/app &&
-              git checkout $BRANCH &&
+              git checkout "$BRANCH" &&
               git fetch --all &&
               git reset --hard && 
               git pull &&
