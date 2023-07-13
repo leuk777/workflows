@@ -24,7 +24,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Image
-        run: docker build -t artefact .
+        run: |
+          echo ${{ secrets.ENV }} > .env
+
+          if [[ ${{ inputs.repo }} == *"stagging"* ]]; then 
+            echo ${{ secrets.ENV_STAGGING }} > .env
+          fi 
+
+          cat .env
+
+          docker build -t artefact .
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
