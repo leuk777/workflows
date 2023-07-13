@@ -15,6 +15,9 @@ on:
       branch_to_deploy:
         type: string
         default: develop
+      region:
+        type: string
+        required: true
     secrets:
       SERVER_ACCESS_KEY:
         required: true
@@ -24,6 +27,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.region }}
+
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
       - name: "Connect to server"
         env:
           SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
