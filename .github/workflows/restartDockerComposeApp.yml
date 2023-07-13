@@ -49,6 +49,6 @@ jobs:
               ls docker-compose* 1> /dev/null 2>&1 && 
               [[ -n $(docker ps -aq) ]] && docker stop $(docker ps -aq) && docker rm $(docker ps -aq);
               docker compose down && 
-              for v in $(docker volume ls -q); do [[ $v != *"db"* && $v != *"caddy"* ]] && docker volume rm "$v"; done &&
+              for v in $(docker volume ls -q); do [[ $v != *"db"* && $v != *"caddy"* ]] && docker volume rm "$v"; done;
               docker compose -f ${{ inputs.compose_file }} up -d --build
           '
