@@ -22,6 +22,7 @@ on:
       SERVER_ACCESS_KEY:
         required: true
       DB_PASSWORD:
+        required: false
 
 jobs:
   restart-app:
