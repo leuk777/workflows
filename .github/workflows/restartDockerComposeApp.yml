@@ -12,6 +12,9 @@ on:
       compose_file:
         type: string
         required: true
+      branch_to_deploy:
+        type: string 
+        default: develop
     secrets:
       SERVER_ACCESS_KEY:
         required: true
@@ -24,13 +27,14 @@ jobs:
       - name: "Connect to server"
         env:
           SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
+          BRANCH: ${{ inputs.branch_to_deploy }}
         run: |
           echo "$SERVER_ACCESS_KEY" > access.pem && chmod 400 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
               git config --global --add safe.directory /home/ubuntu/app &&
               ([[ ! -d /home/ubuntu/app ]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/sanitas.deploy.git /home/ubuntu/app);
               cd /home/ubuntu/app &&
-              git checkout $GITHUB_REF_NAME &&
+              git checkout $BRANCH &&
               git fetch --all &&
               git reset --hard && 
               git pull &&
