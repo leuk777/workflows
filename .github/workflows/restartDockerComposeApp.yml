@@ -34,8 +34,9 @@ jobs:
         run: |
           echo "$SERVER_ACCESS_KEY" > access.pem && chmod 400 access.pem
           ssh  -o StrictHostKeyChecking=no -i access.pem ${{ inputs.user }}@${{ inputs.host}} '
-              [[ ! -f ~/.aws/config ]] && echo "[default]\nregion = ${{ inputs.region }}" >  ~/.aws/config;
-              [[ ! -f ~/.aws/credentials ]] && echo "[default]\naws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}\naws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >  ~/.aws/credentials;
+              [[ ! -d ~/.aws ]] && mkdir ~/.aws &&
+              echo "[default]\nregion = ${{ inputs.region }}" >  ~/.aws/config &&
+              echo "[default]\naws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}\naws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >  ~/.aws/credentials &&
 
               aws ecr get-login-password --region ${{ inputs.region }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ inputs.region }}.amazonaws.com &&
 
