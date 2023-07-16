@@ -46,11 +46,11 @@ jobs:
               git fetch --all &&
               git reset --hard && 
               git pull &&
-              echo DB_PASSWORD="${{ secrets.DB_PASSWORD }}" > .env &&
+              echo "${{ secrets.ENV }}" > .env &&
               ls docker-compose* 1> /dev/null 2>&1 && 
               [[ -n $(docker ps -aq) ]] && docker stop $(docker ps -aq) && docker rm $(docker ps -aq);
               docker compose down && 
               for v in $(docker volume ls -q); do [[ $v != *"db"* && $v != *"caddy"* ]] && docker volume rm "$v"; done;
               docker compose -f ${{ inputs.compose_file }} pull && docker compose -f ${{ inputs.compose_file }} up --remove-orphans --force-recreate --build -d &&
-              docker compose exec api php artisan migrate --force --seed
+              docker compose exec api php artisan migrate --seed --force
           '
