@@ -15,6 +15,9 @@ on:
       branch_to_deploy:
         type: string
         default: develop
+      repo:
+        type: string
+        required: true
       region:
         type: string
         required: true
@@ -40,7 +43,7 @@ jobs:
               aws ecr get-login-password --region ${{ inputs.region }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ inputs.region }}.amazonaws.com &&
 
               git config --global --add safe.directory /home/ubuntu/app &&
-              ([[ ! -d /home/ubuntu/app ]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/sanitas.deploy.git /home/ubuntu/app);
+              ([[ ! -d /home/ubuntu/app ]] && git clone https://${{ secrets.DEPLOY_USER_TOKEN }}@github.com/leuk777/${{ inputs.repo }}.git /home/ubuntu/app);
               cd /home/ubuntu/app &&
               git checkout ${{ inputs.branch_to_deploy }} &&
               git fetch --all &&
