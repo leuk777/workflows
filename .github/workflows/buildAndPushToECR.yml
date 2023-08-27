@@ -26,12 +26,12 @@ jobs:
       - name: Build Image
         env: 
           ENV: ${{ secrets.ENV }}
-          ENV_STAGGING: ${{ secrets.ENV_STAGGING }}
+          ENV_STAGING: ${{ secrets.ENV_STAGING }}
         run: |
           echo "$ENV" > .env
 
-          if [[ ${{ inputs.repo }} == *"stagging"* ]]; then 
-            echo "$ENV_STAGGING" > .env
+          if [[ ${{ inputs.repo }} == *"staging"* ]]; then 
+            echo "$ENV_STAGING" > .env
           fi 
 
           docker build -t artefact .
