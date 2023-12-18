@@ -34,7 +34,7 @@ jobs:
             echo "$ENV_STAGING" > .env
           fi 
 
-          docker build -t artefact .
+          docker build --no-cache -t artefact .
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
