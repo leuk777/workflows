@@ -14,6 +14,10 @@ on:
         required: true 
       AWS_SECRET_ACCESS_KEY:
         required: true 
+      ENV:
+        required: true
+      ENV_STAGING:
+        required: true
 
 jobs:
   connect-push-to-ecr:
